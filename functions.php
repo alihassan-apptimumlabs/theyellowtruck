@@ -630,7 +630,7 @@ function add_draft_count_to_menu() {
 
 add_action('admin_menu', 'add_draft_count_to_menu');
 
-function jobs_listing() { 
+function jobs_listing() {
     ob_start();
 
     $job_args = array(
@@ -641,38 +641,56 @@ function jobs_listing() {
     );
     $job_posts = get_posts($job_args);
 
+    echo '<div class="job-wrapper">';
     echo '<div class="tabs">';
+
     foreach ($job_posts as $index => $job_post) {
         $tab_class = ($index === 0) ? 'tab active' : 'tab';
-
-        echo '<a href="#" class="' . esc_attr($tab_class) . '" data-toggle-target=".tab-content-' . ($index + 1) . '">' . esc_html(get_the_title($job_post->ID)) . '</a>';
-        
+        echo '<a href="#" class="job-card ' . esc_attr($tab_class) . '" data-toggle-target=".tab-content-' . ($index + 1) . '"><b>' . esc_html(get_the_title($job_post->ID)) . '</b>';
         $job_category = get_field('job_category', $job_post->ID);
         $job_location = get_field('job_location', $job_post->ID);
 
-        echo '<p>Job Category: ' . esc_html($job_category) . '</p>';
-        echo '<p>Job Location: ' . esc_html($job_location) . '</p>';
-    }
-    echo '</div><div class="job-content">';
+        echo '<p>Category: ' . esc_html($job_category) . '</p>';
+        echo '<p>Location: ' . esc_html($job_location) . '</p>';
+        echo '</a>';
+            }
+
+    echo '</div>';
+    echo '<div class="job-content">';
 
     foreach ($job_posts as $index => $job_post) {
         $content_class = ($index === 0) ? 'tab-content tab-content-' . ($index + 1) . ' active' : 'tab-content tab-content-' . ($index + 1);
         echo '<div class="' . esc_attr($content_class) . '">';
-        echo '<h2>' . esc_html(get_the_title($job_post->ID)) . '</h2>';
 
         $thumbnail_url = get_the_post_thumbnail_url($job_post->ID, 'thumbnail');
         if ($thumbnail_url) {
             echo '<img src="' . esc_url($thumbnail_url) . '" alt="' . esc_attr(get_the_title($job_post->ID)) . '">';
         }
+        echo '<h3>' . esc_html(get_the_title($job_post->ID)) . '</h3>';
 
         $job_category = get_field('job_category', $job_post->ID);
         $job_location = get_field('job_location', $job_post->ID);
+        $employment_type = get_field('employment_type', $job_post->ID);
+        $compensation = get_field('compensation', $job_post->ID);
+        $job_type = get_field('job_type', $job_post->ID);
 
         echo '<p>Job Category: ' . esc_html($job_category) . '</p>';
         echo '<p>Job Location: ' . esc_html($job_location) . '</p>';
+        echo '<p>Employment Type: ' . esc_html($employment_type) . '</p>';
+        echo '<p>Compensation: ' . esc_html($compensation) . '</p>';
+        echo '<p>Job Type: ' . esc_html($job_type) . '</p>';
 
-        echo '</div></div>';
+        // Get the complete detail page content
+        $post_content = get_post_field('job_description', $job_post->ID);
+      
+        echo wpautop($post_content); // Apply paragraph tags and other formatting
+
+        echo '<a href="#applyjobform" class="apply-btn"> Apply Now </a>';
+
+        echo '</div>';
     }
+
+    echo '</div></div>';
 
     return ob_get_clean();
 }
