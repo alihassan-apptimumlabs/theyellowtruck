@@ -314,7 +314,7 @@ function display_leaderboard() {
         echo '<table class="leaderboard">';
         echo '<thead><tr><th>Name</th><th>Rating</th><th>Total Count</th><th>Stars</th></tr></thead><tbody>';
 
-        // Initialize the array to store aggregated ratings and counts
+        // Initialize the array to store aggregated ratings and 
         $aggregated_ratings = array();
 
         while ($query->have_posts()) {
