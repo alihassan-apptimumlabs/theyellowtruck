@@ -696,3 +696,17 @@ function jobs_listing() {
 }
 
 add_shortcode('jobs-listing', 'jobs_listing');
+
+function custom_search_form() {
+    ob_start();
+    ?>
+    <form role="search" method="get" id="searchform" action="<?php echo esc_url(home_url('/')); ?>">
+        <label for="s" class="screen-reader-text"><?php _e('Search for:', 'theyellowtruck'); ?></label>
+        <input type="text" value="<?php echo get_search_query(); ?>" name="s" id="s" placeholder="<?php esc_attr_e('Search', 'theyellowtruck'); ?>" />
+        <input type="submit" id="searchsubmit" value="<?php esc_attr_e('Search', 'theyellowtruck'); ?>" />
+    </form>
+    <?php
+    return ob_get_clean();
+}
+
+add_shortcode('custom_search', 'custom_search_form');
