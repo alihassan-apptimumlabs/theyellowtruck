@@ -693,22 +693,29 @@ function jobs_listing() {
     echo '</div></div>';
 
     echo '
-    <script>
-        jQuery(document).ready(function($) {
-            var jobWrapper = $(".e-con-boxed");
-            
-            $(window).scroll(function() {
-                var windowScroll = $(window).scrollTop();
-                var jobWrapperOffset = jobWrapper.offset().top;
-
-                if (windowScroll >= jobWrapperOffset) {
-                    jobWrapper.addClass("fixed");
-                } else {
-                    jobWrapper.removeClass("fixed");
-                }
+        <script>
+            jQuery(document).ready(function($) {
+                var jobWrapper = $("#job-wrapper");
+                
+                $(window).scroll(function() {
+                    var windowScroll = $(window).scrollTop();
+                    var jobWrapperOffset = jobWrapper.offset().top;
+                    var jobWrapperHeight = jobWrapper.outerHeight();
+                    var jobWrapperBottom = jobWrapperOffset + jobWrapperHeight;
+                    var windowHeight = $(window).height();
+                    
+                    // Adjust the bottom position for overflow
+                    var visibleBottom = windowScroll + windowHeight;
+                    
+                    if (windowScroll >= jobWrapperOffset && visibleBottom <= jobWrapperBottom) {
+                        jobWrapper.addClass("fixed");
+                    } else {
+                        jobWrapper.removeClass("fixed");
+                    }
+                });
             });
-        });
-    </script>
+        </script>
+
 ';
 
     return ob_get_clean();
