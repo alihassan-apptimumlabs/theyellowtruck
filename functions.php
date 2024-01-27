@@ -314,7 +314,7 @@ function display_leaderboard() {
         echo '<table class="leaderboard">';
         echo '<thead><tr><th>Name</th><th>Rating</th><th>Total Count</th><th>Stars</th></tr></thead><tbody>';
 
-        // Initialize the array to store aggregated ratings and 
+        // Initialize the array to store aggregated ratings and counts
         $aggregated_ratings = array();
 
         while ($query->have_posts()) {
@@ -641,7 +641,7 @@ function jobs_listing() {
     );
     $job_posts = get_posts($job_args);
 
-    echo '<div class="job-wrapper">';
+    echo '<div class="job-wrapper" id="job-wrapper">';
     echo '<div class="tabs">';
 
     foreach ($job_posts as $index => $job_post) {
@@ -653,7 +653,7 @@ function jobs_listing() {
         echo '<p>Category: ' . esc_html($job_category) . '</p>';
         echo '<p>Location: ' . esc_html($job_location) . '</p>';
         echo '</a>';
-            }
+    }
 
     echo '</div>';
     echo '<div class="job-content">';
@@ -691,6 +691,25 @@ function jobs_listing() {
     }
 
     echo '</div></div>';
+
+    echo '
+    <script>
+        jQuery(document).ready(function($) {
+            var jobWrapper = $(".e-con-boxed");
+            
+            $(window).scroll(function() {
+                var windowScroll = $(window).scrollTop();
+                var jobWrapperOffset = jobWrapper.offset().top;
+
+                if (windowScroll >= jobWrapperOffset) {
+                    jobWrapper.addClass("fixed");
+                } else {
+                    jobWrapper.removeClass("fixed");
+                }
+            });
+        });
+    </script>
+';
 
     return ob_get_clean();
 }
